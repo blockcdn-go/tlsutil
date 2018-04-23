@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "B9CFlVeYauuUSBLs+GLp/zT5pRk=",
+			"path": "github.com/blockcdn-go/home",
+			"revision": "a1677a41652a564d89fa52937b4c43d5f952dc42",
+			"revisionTime": "2018-04-23T03:12:46Z"
+		}
+	],
+	"rootPath": "github.com/blockcdn-go/tlsutil"
+}
