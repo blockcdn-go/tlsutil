@@ -18,11 +18,9 @@ var TLSLookup = map[string]uint16{
 type Config struct {
 	CertFile                 string
 	KeyFile                  string
-	ServerName               string
 	TLSMinVersion            string
 	CipherSuites             []uint16
 	PreferServerCipherSuites bool
-	InsecureSkipVerify       bool
 }
 
 // KeyPair 用于打开并解析一对证书和私钥文件
@@ -40,10 +38,8 @@ func (c *Config) KeyPair() (*tls.Certificate, error) {
 // IncomingTLSConfig 为传入请求生成tls配置
 func (c *Config) IncomingTLSConfig() (*tls.Config, error) {
 	tlsConfig := &tls.Config{
-		ServerName:         c.ServerName,
-		ClientCAs:          x509.NewCertPool(),
-		ClientAuth:         tls.NoClientCert,
-		InsecureSkipVerify: c.InsecureSkipVerify,
+		ClientCAs:  x509.NewCertPool(),
+		ClientAuth: tls.NoClientCert,
 	}
 
 	if len(c.CipherSuites) != 0 {
