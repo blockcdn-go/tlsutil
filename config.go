@@ -4,10 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
 	"strings"
-
-	"github.com/blockcdn-go/tlsutil/rootcerts"
 )
 
 // TLSLookup 保存tls协议的各个版本
@@ -19,38 +16,14 @@ var TLSLookup = map[string]uint16{
 
 // Config 用于创建tls.Config
 type Config struct {
-	// VerifyIncoming 用于验证传入连接的真实性。
-	VerifyIncoming bool
-
 	// VerifyServerHostname 用于启用服务器端的主机名验证
-	VerifyServerHostname bool
-
-	CAFile                   string
-	CAPath                   string
+	VerifyServerHostname     bool
 	CertFile                 string
 	KeyFile                  string
 	ServerName               string
 	TLSMinVersion            string
 	CipherSuites             []uint16
 	PreferServerCipherSuites bool
-}
-
-// AppendCA 打开并解析证书文件，并将证书添加到CertPool中
-func (c *Config) AppendCA(pool *x509.CertPool) error {
-	if c.CAFile == "" {
-		return nil
-	}
-
-	data, err := ioutil.ReadFile(c.CAFile)
-	if err != nil {
-		return fmt.Errorf("Failed to read CA file: %v", err)
-	}
-
-	if !pool.AppendCertsFromPEM(data) {
-		return fmt.Errorf("Failed to parse any CA certificates")
-	}
-
-	return nil
 }
 
 // KeyPair 用于打开并解析一对证书和私钥文件
@@ -80,35 +53,11 @@ func (c *Config) IncomingTLSConfig() (*tls.Config, error) {
 		tlsConfig.PreferServerCipherSuites = true
 	}
 
-	if c.CAFile != "" {
-		pool, err := rootcerts.LoadCAFile(c.CAFile)
-		if err != nil {
-			return nil, err
-		}
-		tlsConfig.ClientCAs = pool
-	} else if c.CAPath != "" {
-		pool, err := rootcerts.LoadCAPath(c.CAPath)
-		if err != nil {
-			return nil, err
-		}
-		tlsConfig.ClientCAs = pool
-	}
-
 	cert, err := c.KeyPair()
 	if err != nil {
 		return nil, err
 	} else if cert != nil {
 		tlsConfig.Certificates = []tls.Certificate{*cert}
-	}
-
-	if c.VerifyIncoming {
-		tlsConfig.ClientAuth = tls.RequestClientCert
-		if c.CAFile == "" && c.CAPath == "" {
-			return nil, fmt.Errorf("VerifyIncoming set, and no CA certificate provided")
-		}
-		if cert == nil {
-			return nil, fmt.Errorf("VerifyIncoming set, and no Cert/Key pair provided")
-		}
 	}
 
 	if c.TLSMinVersion != "" {

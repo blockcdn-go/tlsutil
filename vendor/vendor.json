@@ -7,6 +7,18 @@
 			"path": "github.com/blockcdn-go/home",
 			"revision": "a1677a41652a564d89fa52937b4c43d5f952dc42",
 			"revisionTime": "2018-04-23T03:12:46Z"
+		},
+		{
+			"checksumSHA1": "CSPbwbyzqA6sfORicn4HFtIhF/c=",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "8991bc29aa16c548c550c7ff78260e27b9ab7c73",
+			"revisionTime": "2018-02-21T22:46:20Z"
+		},
+		{
+			"checksumSHA1": "TzCyWS9h+C1PqctR2Bp4GpwerA0=",
+			"path": "github.com/gotoxu/assert",
+			"revision": "14269c482f0950fe38a41b49c7884f41c4efcc6f",
+			"revisionTime": "2018-04-23T04:35:27Z"
 		}
 	],
 	"rootPath": "github.com/blockcdn-go/tlsutil"
